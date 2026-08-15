@@ -6,15 +6,12 @@ Phased plan. Each phase should be genuinely usable before starting the next — 
 
 Goal: a personal chat app where Ashish can talk to Claude, GPT, or Gemini, organized into projects that remember what's been discussed.
 
-Build order:
-1. **CORS / native-HTTP spike** (half day) — confirm a direct client → Claude API call works from the Capacitor WebView on Android via `CapacitorHttp`. This determines whether "no backend" survives contact with reality; see `ARCHITECTURE.md`.
-2. App shell — Projects list screen, empty state, "+ New Project"
-3. Chat screen — hardcoded Claude key, send/reply working end-to-end on-device, ChatGPT-style bubbles + markdown + streaming
-4. Basic OTA update check (manifest-based `www` swap) — reduces reinstall friction for every step after this one
-5. Settings screen — save/load 3 API keys via Capacitor Preferences plugin; wire Chat to read the real key; missing/invalid-key error state
-6. AI picker — GPT + Gemini plugs wired up via the same interface, default persists per project
-7. Per-project notes file — naive-truncation append after each exchange, read back in on open
-8. Install on phone, use it for real, daily, for 1–2 weeks — **no new features during this window**
+Build order (as actually executed — see `DECISIONS.md` #24–28 for where this diverged from the original plan and why):
+1. ~~CORS / native-HTTP spike as a standalone step~~ — folded into step 2: `CapacitorHttp` enabled in `capacitor.config.ts`, all three providers call it via plain `fetch`. Real on-device confirmation is the first thing to check when testing the first build.
+2. App shell — Projects list, Chat, and Settings screens, all three provider plugs (Claude/GPT/Gemini), Capacitor Preferences storage, per-project notes (naive truncation), missing/invalid-key handling — built together in one pass rather than staged, since the plug interface made the marginal cost of all three low, and Settings couldn't reasonably come after Chat (decision #28).
+3. ~~Basic OTA update check~~ — evaluated and **not shipped** in v0.1 (decision #24). Update friction is instead handled by CI building an installable debug APK on every push (decision #25), signed with a fixed debug keystore so installs upgrade in place instead of colliding (decision #26).
+4. CI workflow to build a downloadable debug APK — done, `.github/workflows/build-apk.yml`.
+5. Install on phone, use it for real, daily, for 1–2 weeks — **no new features during this window**, current step.
 
 ## v0.2 — Google Drive integration
 
@@ -23,7 +20,7 @@ Only after the v0.1 trial validates the core loop is worth using daily.
 - Google Sign-In + Drive REST API
 - Project notes + chat history synced to a visible Drive folder
 - File attachments in chat, stored/read via Drive (resolves the file-attachment open question left over from the original v0.1 spec)
-- Move the OTA update manifest to the user's own Drive folder, dropping any third-party OTA service dependency
+- True in-app OTA updates, deferred from v0.1 (decision #24): self-hosted via the user's own Drive folder rather than a third-party update service, and testable on-device before it ships — both conditions v0.1 couldn't meet
 
 ## v0.3 — Smarter memory (conditional)
 
