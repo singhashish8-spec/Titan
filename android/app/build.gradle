@@ -16,7 +16,23 @@ android {
             ignoreAssetsPattern = '!.svn:!.git:!.ds_store:!*.scc:.*:!CVS:!thumbs.db:!picasa.ini:!*~'
         }
     }
+    signingConfigs {
+        debug {
+            // Checked in deliberately: this is a debug-only signing key with no
+            // meaningful access, and pinning it keeps every CI-built debug APK
+            // signed identically so installs upgrade in place instead of
+            // colliding on a signature mismatch (which would force an
+            // uninstall and wipe on-device data). See docs/ARCHITECTURE.md.
+            storeFile file('debug.keystore')
+            storePassword 'android'
+            keyAlias 'androiddebugkey'
+            keyPassword 'android'
+        }
+    }
     buildTypes {
+        debug {
+            signingConfig signingConfigs.debug
+        }
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'

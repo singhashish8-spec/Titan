@@ -1,2 +1,22 @@
 /* For information on how to create your own theme, please refer to:
 http://ionicframework.com/docs/theming/ */
+
+.markdown-bubble p {
+  margin: 0 0 8px 0;
+}
+
+.markdown-bubble p:last-child {
+  margin-bottom: 0;
+}
+
+.markdown-bubble pre {
+  white-space: pre-wrap;
+  overflow-x: auto;
+  background: rgba(0, 0, 0, 0.08);
+  padding: 8px;
+  border-radius: 8px;
+}
+
+.markdown-bubble code {
+  font-size: 0.9em;
+}
