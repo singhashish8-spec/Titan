@@ -1,0 +1,30 @@
+# Node
+node_modules/
+npm-debug.log*
+
+# Capacitor / Ionic build output
+www/
+dist/
+build/
+
+# Android
+android/app/build/
+android/build/
+android/.gradle/
+android/local.properties
+android/*.keystore
+android/*.jks
+
+# iOS (if ever added)
+ios/App/Pods/
+ios/App/build/
+
+# Env / secrets
+.env
+.env.local
+
+# Editor / OS
+.DS_Store
+.vscode/
+.idea/
+*.log
