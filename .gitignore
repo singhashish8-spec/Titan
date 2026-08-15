@@ -15,7 +15,7 @@ android/local.properties
 android/*.keystore
 android/*.jks
 # Exception: checked-in debug-only signing key, see build.gradle comment.
-!android/debug.keystore
+!android/app/debug.keystore
 
 # iOS (if ever added)
 ios/App/Pods/
